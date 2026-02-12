@@ -9,13 +9,13 @@ const qualificationQuiz = {
   questions: [
     {
       text: "Кто из этих стримеров попадал в скандалы из-за рекламы онлайн-казино 🎰?",
-      visualHint: "Картинка",
-      options: ["🎬 Дима Масленников", "Мелстрой", "Юрий Дудь", "Влад А4"],
+      visualHint: "картинка",
+      options: ["Дима Масленников", "Мелстрой", "Юрий Дудь", "Влад А4"],
       weightMap: { 1: 2 },
     },
     {
       text: "Что тебе интереснее? 🤔",
-      visualHint: "Картинка",
+      visualHint: "картинка",
       options: [
         "Гарантированно получить 1 000 ₽",
         "50% шанс получить 3 000 ₽",
@@ -26,7 +26,7 @@ const qualificationQuiz = {
     },
     {
       text: "Если в игре выпадает множитель x1️⃣0️⃣ — это значит:",
-      visualHint: "Картинка",
+      visualHint: "картинка",
       options: [
         "Приз увеличится в 10 раз",
         "Нужно сделать 10 действий",
@@ -37,7 +37,7 @@ const qualificationQuiz = {
     },
     {
       text: "Ты чаще: 🧠",
-      visualHint: "Картинка",
+      visualHint: "картинка",
       options: [
         "Долго анализируешь",
         "Действуешь по интуиции",
@@ -48,13 +48,13 @@ const qualificationQuiz = {
     },
     {
       text: "Что чаще всего пишут в чате, когда кто-то срывает крупный выигрыш? 💬 ",
-      visualHint: "Картинка",
+      visualHint: "картинка",
       options: ["Лаки", "GG", "Повезло", "Минус"],
       weightMap: { 0: 1, 1: 1 },
     },
     {
       text: "Вейджер — это: 📚",
-      visualHint: "Картинка",
+      visualHint: "картинка",
       options: [
         "Комиссия банка",
         "Количество прокруток бонуса",
@@ -65,7 +65,7 @@ const qualificationQuiz = {
     },
     {
       text: "Если ты проиграл 5 000 ₽, что ты сделаешь? 🎲 ",
-      visualHint: "Картинка",
+      visualHint: "картинка",
       options: [
         "Прекращу",
         "Попробую отыграться",
@@ -129,9 +129,9 @@ const extraQuizzes = [
 ].map((quiz) => ({
   ...quiz,
   questions: quiz.questions.map((text) => ({
-    text,
-    visualHint: "🧩 Дополнительный раунд",
-    options: ["✅ Скорее да", "❌ Скорее нет", "🤔 Зависит от ситуации", "🙈 Не знаю"],
+    text: `${text} ❓`,
+    visualHint: "картинка",
+    options: ["Скорее да", "Скорее нет", "Зависит от ситуации", "Не знаю"],
     weightMap: { 0: 2, 2: 1 },
   })),
 }));
@@ -279,6 +279,7 @@ function startQuiz(quiz) {
     score: 0,
     answers: [],
     left: quiz.timePerQuestion,
+    transitioning: false,
   };
   renderQuestion(session);
 }
@@ -291,22 +292,25 @@ function renderQuestion(session) {
   const ringProgress = (session.left / quiz.timePerQuestion) * 100;
 
   setScreen(`
-    <div class="progress-wrap">
-      <div class="progress-meta">
-        <span>${quiz.title}</span>
-        <span>${index + 1}/${quiz.questions.length}</span>
+    <section class="question-stage">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span>${quiz.title}</span>
+          <div class="progress-status">
+            <span>${index + 1}/${quiz.questions.length}</span>
+            <div class="timer-circle" style="--progress:${ringProgress}%">
+              <div class="timer-circle-inner">
+                <strong id="timer">${session.left}с</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
       </div>
-      <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
-    </div>
-    <div class="timer-circle" style="--progress:${ringProgress}%">
-      <div class="timer-circle-inner">
-        <span class="timer-label">Осталось</span>
-        <strong id="timer">${session.left}с</strong>
-      </div>
-    </div>
-    <div class="image-placeholder question-image">${question.visualHint || "🖼️ Блок для картинки вопроса"}</div>
-    <h2>${question.text}</h2>
-    <div class="stack" id="answers"></div>
+      <div class="image-placeholder question-image">${question.visualHint || "картинка"}</div>
+      <h2>${question.text}</h2>
+      <div class="stack" id="answers"></div>
+    </section>
   `);
 
   const answersNode = document.querySelector("#answers");
@@ -318,22 +322,27 @@ function renderQuestion(session) {
     answersNode.appendChild(button);
   });
 
+  const startedAt = performance.now();
   timer = setInterval(() => {
-    session.left -= 1;
+    const elapsedSeconds = (performance.now() - startedAt) / 1000;
+    const leftSeconds = Math.max(quiz.timePerQuestion - elapsedSeconds, 0);
+    session.left = Math.ceil(leftSeconds);
     const timerNode = document.querySelector("#timer");
     const timerWrap = document.querySelector(".timer-circle");
     if (timerNode) timerNode.textContent = `${session.left}с`;
     if (timerWrap) {
-      const dynamicProgress = Math.max((session.left / quiz.timePerQuestion) * 100, 0);
+      const dynamicProgress = Math.max((leftSeconds / quiz.timePerQuestion) * 100, 0);
       timerWrap.style.setProperty("--progress", `${dynamicProgress}%`);
     }
-    if (session.left <= 0) {
+    if (leftSeconds <= 0) {
       choose(session, null);
     }
-  }, 1000);
+  }, 80);
 }
 
 function choose(session, optionIndex) {
+  if (session.transitioning) return;
+  session.transitioning = true;
   clearTimer();
   const question = session.quiz.questions[session.index];
   const gain = optionIndex !== null ? question.weightMap[optionIndex] || 0 : 0;
@@ -342,16 +351,22 @@ function choose(session, optionIndex) {
   session.index += 1;
   session.left = session.quiz.timePerQuestion;
 
-  if (session.index >= session.quiz.questions.length) {
-    if (session.quiz.id === "qualification") {
-      finishQualification(session.score);
-    } else {
-      finishExtraQuiz(session.quiz.id, session.score);
-    }
-    return;
-  }
+  const stage = document.querySelector(".question-stage");
+  if (stage) stage.classList.add("is-leaving");
 
-  renderQuestion(session);
+  setTimeout(() => {
+    session.transitioning = false;
+    if (session.index >= session.quiz.questions.length) {
+      if (session.quiz.id === "qualification") {
+        finishQualification(session.score);
+      } else {
+        finishExtraQuiz(session.quiz.id, session.score);
+      }
+      return;
+    }
+
+    renderQuestion(session);
+  }, 220);
 }
 
 function finishQualification(score) {
