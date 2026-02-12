@@ -25,7 +25,7 @@ body {
 .app-shell {
   max-width: 760px;
   margin: 0 auto;
-  padding: 20px 14px 40px;
+  padding: 40px 28px 80px;
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
@@ -37,7 +37,7 @@ body {
   border-radius: 24px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
-  padding: 20px;
+  padding: 24px;
   animation: fadeSlide 280ms ease;
 }
 
@@ -62,7 +62,7 @@ p {
 h1,
 h2 {
   line-height: 1.2;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
 }
 
 p {
@@ -107,22 +107,22 @@ p {
 
 .stack {
   display: grid;
-  gap: 10px;
+  gap: 20px;
 }
 
 .landing-hero {
   background: linear-gradient(135deg, #f9fbff 0%, #f0f5ff 100%);
   border: 1px solid #dbe5ff;
   border-radius: 18px;
-  padding: 16px;
-  margin-bottom: 14px;
+  padding: 24px;
+  margin-bottom: 28px;
 }
 
 .progress-wrap {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 
 .progress-meta {
@@ -130,6 +130,12 @@ p {
   justify-content: space-between;
   color: var(--muted);
   font-size: 13px;
+}
+
+.progress-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .progress-track {
@@ -153,12 +159,12 @@ p {
   background: white;
   padding: 14px;
   display: grid;
-  gap: 10px;
+  gap: 20px;
   position: relative;
 }
 
 .quiz-card.featured {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .quiz-card.locked {
@@ -199,18 +205,19 @@ p {
 
 .timer-circle {
   --progress: 100%;
-  width: 150px;
-  height: 150px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  margin: 0 auto 14px;
+  margin: 0;
   background: conic-gradient(var(--danger) var(--progress), #ebedf4 0);
   display: grid;
   place-items: center;
+  transition: background 80ms linear;
 }
 
 .timer-circle-inner {
-  width: 126px;
-  height: 126px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: white;
   border: 1px solid var(--border);
@@ -219,13 +226,8 @@ p {
   text-align: center;
 }
 
-.timer-label {
-  font-size: 12px;
-  color: var(--muted);
-}
-
 #timer {
-  font-size: 34px;
+  font-size: 11px;
   line-height: 1;
   color: var(--danger);
 }
@@ -235,14 +237,48 @@ p {
   border-radius: 14px;
   background: #f4f7ff;
   color: #4a5ea8;
-  padding: 20px;
+  padding: 24px;
   text-align: center;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
 }
 
 .question-image {
-  margin-top: 6px;
+  margin-top: 12px;
+  min-height: 360px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+}
+
+.question-stage {
+  animation: questionIn 260ms ease;
+}
+
+.question-stage.is-leaving {
+  animation: questionOut 220ms ease forwards;
+}
+
+@keyframes questionIn {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes questionOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
 }
 
 .input {
@@ -251,7 +287,7 @@ p {
   border-radius: 12px;
   border: 1px solid var(--border);
   font-size: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .badge {
@@ -262,19 +298,19 @@ p {
   border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .leaderboard {
   display: grid;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 24px;
 }
 
 .row {
   display: grid;
   grid-template-columns: 32px 1fr auto;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
   background: #fbfcff;
   border: 1px solid var(--border);
@@ -307,7 +343,7 @@ p {
 }
 
 .spacer {
-  height: 6px;
+  height: 12px;
 }
 
 @media (min-width: 720px) {
@@ -316,6 +352,6 @@ p {
   }
 
   .card {
-    padding: 24px;
+    padding: 32px;
   }
 }
