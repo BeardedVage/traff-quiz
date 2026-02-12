@@ -257,9 +257,27 @@ p {
 .question-image {
   margin-top: 12px;
   min-height: 360px;
-  display: grid;
-  place-items: center;
-  font-size: 24px;
+}
+
+.image-frame {
+  border: 1px solid #dbe5ff;
+  border-radius: 14px;
+  background: #f4f7ff;
+  height: 360px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-fit-height {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
 }
 
 .question-stage {
