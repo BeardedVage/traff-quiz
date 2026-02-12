@@ -2,6 +2,20 @@ const STORAGE_KEY = "traffQuizStateV1";
 const CONTACT_EMAIL = "leads@example.com";
 const BONUS_URL = "https://real1000.org/";
 
+const IMAGE_ASSETS = {
+  landing: "img/main.jpg",
+  qualificationQuestions: [
+    "img/1.webp",
+    "img/2.jpeg",
+    "img/3.png",
+    "img/4.jpg",
+    "img/5.avif",
+    "img/6.jpg",
+    "img/7.jpg",
+  ],
+  result: "img/end.png",
+};
+
 const qualificationQuiz = {
   id: "qualification",
   title: "Стартовый тест",
@@ -192,6 +206,18 @@ function setScreen(html) {
   screen.innerHTML = html;
 }
 
+function imageBlockHtml(src, alt) {
+  if (!src) {
+    return '<div class="image-placeholder">🖼️ Картинка появится здесь</div>';
+  }
+
+  return `
+    <div class="image-frame">
+      <img src="${src}" alt="${alt}" class="image-fit-height" />
+    </div>
+  `;
+}
+
 function openBonusSite() {
   window.open(BONUS_URL, "_blank", "noopener,noreferrer");
 }
@@ -223,7 +249,7 @@ function renderLanding() {
     <section class="landing-hero">
       <h1>Проходи тесты и выигрывай призы</h1>
       <p>Тебе доступен первый стартовый тест из 7 вопросов. Сможешь выиграть приз на 5 000 000 монет?</p>
-      <div class="image-placeholder">🖼️ Блок для картинки главной страницы</div>
+      ${imageBlockHtml(IMAGE_ASSETS.landing, "Главная иллюстрация квиза")}
       <article class="quiz-card featured">
         <div>
           <h3>${qualificationQuiz.title}</h3>
@@ -381,7 +407,10 @@ function renderQuestion(session) {
         </div>
         <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
       </div>
-      <div class="image-placeholder question-image">${question.visualHint || "картинка"}</div>
+      ${imageBlockHtml(
+        quiz.id === "qualification" ? IMAGE_ASSETS.qualificationQuestions[index] : null,
+        `Изображение к вопросу ${index + 1}`,
+      )}
       <h2>${question.text}</h2>
       <div class="stack" id="answers"></div>
     </section>
@@ -478,7 +507,7 @@ function renderResult() {
     setScreen(`
       <span class="badge">Ты прошёл квалификацию</span>
       <h2>🎉 Отличный старт! Ты быстро принимаешь решения и хорошо чувствуешь игровые механики.</h2>
-      <div class="image-placeholder">🖼️ Блок для картинки результатов</div>
+      ${imageBlockHtml(IMAGE_ASSETS.result, "Финальный экран результатов")}
       <p class="prize-block">Ваш приз: <strong>5 000 000 🪙</strong></p>
       <p>Промокод: <strong>${state.bonusCode}</strong></p>
       <div class="stack">
@@ -493,7 +522,7 @@ function renderResult() {
   } else {
     setScreen(`
       <h2>🙂 Хорошая попытка! Ты больше опираешься на рациональность, чем на риск.</h2>
-      <div class="image-placeholder">🖼️ Блок для картинки результатов</div>
+      ${imageBlockHtml(IMAGE_ASSETS.result, "Финальный экран результатов")}
       <p>Доступ к остальным квизам уже открыт — попробуй улучшить позицию в рейтинге.</p>
       <div class="stack">
         <button class="button button-primary" id="homeBtn">Вернуться на главную</button>
