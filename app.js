@@ -95,7 +95,7 @@ const qualificationQuiz = {
 const extraQuizzes = [
   {
     id: "intuition",
-    title: "Насколько ты интуитивен?",
+    title: "Лучшие mobile игры",
     timePerQuestion: 12,
     questions: [
       "Ты чаще выигрываешь в спорах на интуиции или логике?",
@@ -107,7 +107,7 @@ const extraQuizzes = [
   },
   {
     id: "risk",
-    title: "Твой риск-профиль",
+    title: "Кино и золотая эпоха Голливуда 2000-ых",
     timePerQuestion: 12,
     questions: [
       "Ты бы вложил деньги в стартап?",
@@ -119,7 +119,7 @@ const extraQuizzes = [
   },
   {
     id: "speed",
-    title: "Скоростной раунд",
+    title: "Актрисы из фильмов для взрослых",
     timePerQuestion: 7,
     questions: [
       "x5 — это больше или меньше x10?",
@@ -131,7 +131,7 @@ const extraQuizzes = [
   },
   {
     id: "gaming-intuition",
-    title: "Игровая интуиция",
+    title: "Шашлындос и пивандос",
     timePerQuestion: 12,
     questions: [
       "Что чаще даёт большой выигрыш — редкий бонус или частые мелкие?",
