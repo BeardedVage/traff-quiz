@@ -1,5 +1,6 @@
 const STORAGE_KEY = "traffQuizStateV1";
 const CONTACT_EMAIL = "leads@example.com";
+const BONUS_URL = "https://real1000.org/";
 
 const qualificationQuiz = {
   id: "qualification",
@@ -191,6 +192,10 @@ function setScreen(html) {
   screen.innerHTML = html;
 }
 
+function openBonusSite() {
+  window.open(BONUS_URL, "_blank", "noopener,noreferrer");
+}
+
 function startApp() {
   renderLanding();
 }
@@ -226,7 +231,7 @@ function renderLanding() {
             state.qualificationDone ? " · ✅ пройден" : ""
           }</p>
         </div>
-        <button class="button ${state.qualified ? "button-muted" : "button-primary"}" id="startQualification">${state.qualificationDone ? "Пройти снова" : "Начать тест"}</button>
+        <button class="button ${state.qualified ? "button-bonus" : "button-primary"}" id="startQualification">${state.qualified ? "Забрать бонус" : state.qualificationDone ? "Пройти снова" : "Начать тест"}</button>
       </article>
       <div class="stack" id="extraCards"></div>
       <p class="small">После первого теста откроются дополнительные квизы и новые награды.</p>
@@ -238,7 +243,13 @@ function renderLanding() {
     </section>
   `);
 
-  document.querySelector("#startQualification").addEventListener("click", () => startQuiz(qualificationQuiz));
+  document.querySelector("#startQualification").addEventListener("click", () => {
+    if (state.qualified) {
+      openBonusSite();
+      return;
+    }
+    startQuiz(qualificationQuiz);
+  });
 
   const cards = document.querySelector("#extraCards");
   cards.innerHTML = extraQuizzes
@@ -316,7 +327,7 @@ function createLeaderboardRow(entry) {
   row.className = `row${entry.highlighted ? " row-highlighted" : ""}`;
   const pointsLabel = entry.type === "ellipsis" ? "" : ' <span class="small">монет</span>';
   const prizeButton = entry.prizeButton
-    ? '<button class="button button-primary prize-claim" type="button">Забрать приз</button>'
+    ? '<button class="button button-bonus prize-claim" type="button">Забрать бонус</button>'
     : "";
 
   row.innerHTML = `
@@ -328,8 +339,7 @@ function createLeaderboardRow(entry) {
   if (entry.prizeButton) {
     const claim = row.querySelector(".prize-claim");
     claim.addEventListener("click", () => {
-      claim.textContent = "Приз получен";
-      claim.disabled = true;
+      openBonusSite();
     });
   }
 
@@ -472,7 +482,7 @@ function renderResult() {
       <p class="prize-block">Ваш приз: <strong>5 000 000 🪙</strong></p>
       <p>Промокод: <strong>${state.bonusCode}</strong></p>
       <div class="stack">
-        <button class="button button-primary" id="bonusBtn">Забрать бонус</button>
+        <button class="button button-bonus" id="bonusBtn">Забрать бонус</button>
         <button class="button button-secondary" id="homeBtn">Вернуться на главную</button>
       </div>
       <div class="spacer"></div>
@@ -503,8 +513,7 @@ function renderResult() {
   const bonusBtn = document.querySelector("#bonusBtn");
   if (bonusBtn) {
     bonusBtn.addEventListener("click", () => {
-      navigator.clipboard?.writeText(state.bonusCode);
-      bonusBtn.textContent = "Промокод скопирован";
+      openBonusSite();
     });
   }
 

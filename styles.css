@@ -25,7 +25,7 @@ body {
 .app-shell {
   max-width: 760px;
   margin: 0 auto;
-  padding: 40px 28px 80px;
+  padding: 0;
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
@@ -92,6 +92,12 @@ p {
 
 .button-primary {
   background: var(--accent);
+  color: white;
+}
+
+
+.button-bonus {
+  background: #d92020;
   color: white;
 }
 
