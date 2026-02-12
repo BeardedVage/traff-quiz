@@ -13,7 +13,7 @@ const IMAGE_ASSETS = {
     "6.jpg",
     "7.jpg",
   ],
-  result: "img/end.png",
+  result: "end.png",
 };
 
 const qualificationQuiz = {
