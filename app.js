@@ -146,17 +146,17 @@ const leaderboardSeed = Array.from({ length: 100 }, (_, idx) => {
 });
 
 const landingLeaders = [
-  { place: 1, name: "Дима Лорд", points: "6 700 000" },
-  { place: 2, name: "Стетхем", points: "6 120 000" },
-  { place: 3, name: "Дуэйн Скала Джонсон", points: "5 840 000" },
-  { place: 4, name: "Барак Обэма", points: "5 410 000" },
+  { place: 1, name: "Дима Лорд", points: "3 900 000" },
+  { place: 2, name: "Стетхем", points: "3 720 000" },
+  { place: 3, name: "Дуэйн Скала Джонсон", points: "3 480 000" },
+  { place: 4, name: "Барак Обэма", points: "3 210 000" },
 ];
 
 const resultLeaders = [
-  { place: 1, name: "Дима Лорд", points: "6 700 000" },
-  { place: 2, name: "NeoTiger", points: "6 230 000" },
-  { place: 3, name: "Люся Flash", points: "5 880 000" },
-  { place: 4, name: "Стетхем", points: "5 560 000" },
+  { place: 1, name: "Дима Лорд", points: "3 980 000" },
+  { place: 2, name: "NeoTiger", points: "3 760 000" },
+  { place: 3, name: "Люся Flash", points: "3 540 000" },
+  { place: 4, name: "Стетхем", points: "3 280 000" },
 ];
 
 const defaultState = {
@@ -204,7 +204,7 @@ function quizCardHtml(quiz, { locked, completed }) {
         <h3>${quiz.title} ${lockIcon}</h3>
         <p class="small">${quiz.questions.length} вопросов · ${quiz.timePerQuestion}с на вопрос${done}</p>
       </div>
-      <button class="button ${locked ? "button-outline" : "button-primary"}" ${locked ? "disabled" : ""} data-quiz="${quiz.id}">
+      <button class="button ${locked ? "button-outline" : state.qualified ? "button-muted" : "button-primary"}" ${locked ? "disabled" : ""} data-quiz="${quiz.id}">
         ${locked ? "Недоступно" : "Начать"}
       </button>
     </article>
@@ -226,7 +226,7 @@ function renderLanding() {
             state.qualificationDone ? " · ✅ пройден" : ""
           }</p>
         </div>
-        <button class="button button-primary" id="startQualification">${state.qualificationDone ? "Пройти снова" : "Начать тест"}</button>
+        <button class="button ${state.qualified ? "button-muted" : "button-primary"}" id="startQualification">${state.qualificationDone ? "Пройти снова" : "Начать тест"}</button>
       </article>
       <div class="stack" id="extraCards"></div>
       <p class="small">После первого теста откроются дополнительные квизы и новые награды.</p>
@@ -260,16 +260,80 @@ function renderLanding() {
   }
 
   const board = document.querySelector("#landingBoard");
-  landingLeaders.forEach((entry) => {
-    const row = document.createElement("div");
-    row.className = "row";
-    row.innerHTML = `
-      <div class="small">#${entry.place}</div>
-      <div class="user"><span>${entry.name}</span></div>
-      <div><strong>${entry.points}</strong> <span class="small">монет</span></div>
-    `;
-    board.appendChild(row);
+  buildFirstTestLeaderboard(landingLeaders, { includePrizeButton: true }).forEach((entry) => {
+    board.appendChild(createLeaderboardRow(entry));
   });
+}
+
+function buildFirstTestLeaderboard(baseLeaders, options = {}) {
+  const { includePrizeButton = false } = options;
+  const leaders = baseLeaders.map((entry) => ({
+    ...entry,
+    type: "default",
+  }));
+
+  if (!state.qualificationDone) {
+    return leaders;
+  }
+
+  if (state.qualified) {
+    const shifted = leaders.map((entry) => ({
+      ...entry,
+      place: entry.place + 1,
+    }));
+    return [
+      {
+        place: 1,
+        name: "Вы",
+        points: "5 000 000",
+        type: "player",
+        highlighted: true,
+        prizeButton: includePrizeButton,
+      },
+      ...shifted,
+    ];
+  }
+
+  return [
+    ...leaders,
+    {
+      place: "...",
+      name: "...",
+      points: "...",
+      type: "ellipsis",
+    },
+    {
+      place: 1847,
+      name: "Вы",
+      points: "0",
+      type: "player",
+    },
+  ];
+}
+
+function createLeaderboardRow(entry) {
+  const row = document.createElement("div");
+  row.className = `row${entry.highlighted ? " row-highlighted" : ""}`;
+  const pointsLabel = entry.type === "ellipsis" ? "" : ' <span class="small">монет</span>';
+  const prizeButton = entry.prizeButton
+    ? '<button class="button button-primary prize-claim" type="button">Забрать приз</button>'
+    : "";
+
+  row.innerHTML = `
+    <div class="small">#${entry.place}</div>
+    <div class="user"><span>${entry.name}</span></div>
+    <div class="leader-score"><strong>${entry.points}</strong>${pointsLabel}${prizeButton}</div>
+  `;
+
+  if (entry.prizeButton) {
+    const claim = row.querySelector(".prize-claim");
+    claim.addEventListener("click", () => {
+      claim.textContent = "Приз получен";
+      claim.disabled = true;
+    });
+  }
+
+  return row;
 }
 
 function startQuiz(quiz) {
@@ -400,17 +464,15 @@ function finishExtraQuiz(quizId, score) {
 }
 
 function renderResult() {
-  const level = state.qualificationScore >= 9 ? "Risk Player" : "Intuitive Player";
-
   if (state.qualified) {
     setScreen(`
       <span class="badge">Ты прошёл квалификацию</span>
       <h2>🎉 Отличный старт! Ты быстро принимаешь решения и хорошо чувствуешь игровые механики.</h2>
       <div class="image-placeholder">🖼️ Блок для картинки результатов</div>
-      <p>Уровень: <strong>${level}</strong></p>
+      <p class="prize-block">Ваш приз: <strong>5 000 000 🪙</strong></p>
       <p>Промокод: <strong>${state.bonusCode}</strong></p>
       <div class="stack">
-        <button class="button button-primary" id="bonusBtn">Получить бонус</button>
+        <button class="button button-primary" id="bonusBtn">Забрать бонус</button>
         <button class="button button-secondary" id="homeBtn">Вернуться на главную</button>
       </div>
       <div class="spacer"></div>
@@ -434,15 +496,8 @@ function renderResult() {
   }
 
   const resultBoard = document.querySelector("#resultBoard");
-  resultLeaders.forEach((entry) => {
-    const row = document.createElement("div");
-    row.className = "row";
-    row.innerHTML = `
-      <div class="small">#${entry.place}</div>
-      <div class="user"><span>${entry.name}</span></div>
-      <div><strong>${entry.points}</strong> <span class="small">монет</span></div>
-    `;
-    resultBoard.appendChild(row);
+  buildFirstTestLeaderboard(resultLeaders).forEach((entry) => {
+    resultBoard.appendChild(createLeaderboardRow(entry));
   });
 
   const bonusBtn = document.querySelector("#bonusBtn");
