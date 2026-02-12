@@ -3,15 +3,15 @@ const CONTACT_EMAIL = "leads@example.com";
 const BONUS_URL = "https://real1000.org/";
 
 const IMAGE_ASSETS = {
-  landing: "img/main.jpg",
+  landing: "main.jpg",
   qualificationQuestions: [
-    "img/1.webp",
-    "img/2.jpeg",
-    "img/3.png",
-    "img/4.jpg",
-    "img/5.avif",
-    "img/6.jpg",
-    "img/7.jpg",
+    "1.webp",
+    "2.jpeg",
+    "3.png",
+    "4.jpg",
+    "5.avif",
+    "6.jpg",
+    "7.jpg",
   ],
   result: "img/end.png",
 };
