@@ -3,67 +3,74 @@ const CONTACT_EMAIL = "leads@example.com";
 
 const qualificationQuiz = {
   id: "qualification",
-  title: "Квалификационный тест",
+  title: "Стартовый тест",
   timePerQuestion: 15,
-  description: "7 вопросов, чтобы определить твой профиль и выдать бонус.",
+  description: "7 вопросов, чтобы определить твой профиль и открыть доступ к квизам.",
   questions: [
     {
       text: "Кто из этих стримеров попадал в скандалы из-за рекламы онлайн-казино?",
-      options: ["Дима Масленников", "Мелстрой", "Юрий Дудь", "Влад А4"],
+      visualHint: "🎥 Медиа-персона",
+      options: ["🎬 Дима Масленников", "🔥 Мелстрой", "📰 Юрий Дудь", "🧸 Влад А4"],
       weightMap: { 1: 2 },
     },
     {
       text: "Что тебе интереснее?",
+      visualHint: "💸 Выбор стратегии",
       options: [
-        "Гарантированно получить 1 000 ₽",
-        "50% шанс получить 3 000 ₽",
-        "10% шанс получить 15 000 ₽",
-        "Я не люблю рисковать",
+        "💰 Гарантированно получить 1 000 ₽",
+        "🎯 50% шанс получить 3 000 ₽",
+        "🚀 10% шанс получить 15 000 ₽",
+        "🛡️ Я не люблю рисковать",
       ],
       weightMap: { 1: 2, 2: 2 },
     },
     {
       text: "Если в игре выпадает множитель x10 — это значит:",
+      visualHint: "🎰 Термины игры",
       options: [
-        "Приз увеличится в 10 раз",
-        "Нужно сделать 10 действий",
-        "Это уровень сложности",
-        "Это просто число без значения",
+        "✅ Приз увеличится в 10 раз",
+        "🔢 Нужно сделать 10 действий",
+        "📈 Это уровень сложности",
+        "❔ Это просто число без значения",
       ],
       weightMap: { 0: 2 },
     },
     {
       text: "Ты чаще:",
+      visualHint: "🧠 Поведение",
       options: [
-        "Долго анализируешь",
-        "Действуешь по интуиции",
-        "Любишь быстрые решения",
-        "Избегаешь неопределенности",
+        "🧾 Долго анализируешь",
+        "✨ Действуешь по интуиции",
+        "⚡ Любишь быстрые решения",
+        "🚪 Избегаешь неопределенности",
       ],
       weightMap: { 1: 1, 2: 1 },
     },
     {
       text: "Что чаще всего пишут в чате, когда кто-то срывает крупный выигрыш?",
-      options: ["Лаки", "GG", "Повезло", "Минус"],
+      visualHint: "💬 Игровой чат",
+      options: ["🍀 Лаки", "🏆 GG", "😲 Повезло", "📉 Минус"],
       weightMap: { 0: 1, 1: 1 },
     },
     {
       text: "Вейджер — это:",
+      visualHint: "📚 Словарь",
       options: [
-        "Комиссия банка",
-        "Количество прокруток бонуса",
-        "Процент налога",
-        "Ставка на спорт",
+        "🏦 Комиссия банка",
+        "🔁 Количество прокруток бонуса",
+        "🧾 Процент налога",
+        "⚽ Ставка на спорт",
       ],
       weightMap: { 1: 3 },
     },
     {
       text: "Если ты проиграл 5 000 ₽, что ты сделаешь?",
+      visualHint: "🎲 Реакция на риск",
       options: [
-        "Прекращу",
-        "Попробую отыграться",
-        "Попробую позже",
-        "Больше не буду играть",
+        "🛑 Прекращу",
+        "🎯 Попробую отыграться",
+        "🕒 Попробую позже",
+        "🚫 Больше не буду играть",
       ],
       weightMap: { 1: 1, 2: 1 },
     },
@@ -123,30 +130,34 @@ const extraQuizzes = [
   ...quiz,
   questions: quiz.questions.map((text) => ({
     text,
-    options: ["Скорее да", "Скорее нет", "Зависит от ситуации", "Не знаю"],
+    visualHint: "🧩 Дополнительный раунд",
+    options: ["✅ Скорее да", "❌ Скорее нет", "🤔 Зависит от ситуации", "🙈 Не знаю"],
     weightMap: { 0: 2, 2: 1 },
   })),
 }));
 
 const leaderboardSeed = Array.from({ length: 100 }, (_, idx) => {
-  const names = [
-    "LuckyFox",
-    "RiskWolf",
-    "NikaSpin",
-    "TurboMax",
-    "IceCherry",
-    "ShadowBet",
-    "Vega88",
-    "FlashCat",
-    "MoonDice",
-    "GGplayer",
-  ];
+  const names = ["LuckyFox", "RiskWolf", "NikaSpin", "TurboMax", "IceCherry", "ShadowBet", "Vega88", "FlashCat", "MoonDice", "GGplayer"];
   return {
     nickname: `${names[idx % names.length]}${idx + 1}`,
     points: 2500 - idx * 11,
     avatar: names[idx % names.length][0],
   };
 });
+
+const landingLeaders = [
+  { place: 1, name: "Дима Лорд", points: "6 700 000" },
+  { place: 2, name: "Стетхем", points: "6 120 000" },
+  { place: 3, name: "Дуэйн Скала Джонсон", points: "5 840 000" },
+  { place: 4, name: "Барак Обэма", points: "5 410 000" },
+];
+
+const resultLeaders = [
+  { place: 1, name: "Дима Лорд", points: "6 700 000" },
+  { place: 2, name: "NeoTiger", points: "6 230 000" },
+  { place: 3, name: "Люся Flash", points: "5 880 000" },
+  { place: 4, name: "Стетхем", points: "5 560 000" },
+];
 
 const defaultState = {
   qualificationDone: false,
@@ -181,29 +192,84 @@ function setScreen(html) {
 }
 
 function startApp() {
-  if (!state.qualificationDone) {
-    renderLanding();
-  } else {
-    renderHub();
-  }
+  renderLanding();
+}
+
+function quizCardHtml(quiz, { locked, completed }) {
+  const lockIcon = locked ? '<span class="lock">🔒</span>' : "";
+  const done = completed ? " · ✅ пройден" : "";
+  return `
+    <article class="quiz-card ${locked ? "locked" : ""}" ${locked ? 'data-tooltip="Станет доступно после прохождения первого теста"' : ""}>
+      <div>
+        <h3>${quiz.title} ${lockIcon}</h3>
+        <p class="small">${quiz.questions.length} вопросов · ${quiz.timePerQuestion}с на вопрос${done}</p>
+      </div>
+      <button class="button ${locked ? "button-outline" : "button-primary"}" ${locked ? "disabled" : ""} data-quiz="${quiz.id}">
+        ${locked ? "Недоступно" : "Начать"}
+      </button>
+    </article>
+  `;
 }
 
 function renderLanding() {
   clearTimer();
+
   setScreen(`
-    <span class="badge">MVP • mobile-first</span>
-    <h1>Тест на интуицию и удачу</h1>
-    <p>Пройди быстрый квиз из 7 вопросов, узнай свой профиль и получи доступ к бонусу и всем дополнительным тестам.</p>
-    <div class="stack">
-      <button class="button button-primary" id="startQualification">Начать тест</button>
-      <button class="button button-secondary" id="resumeProgress">Продолжить с сохранённым прогрессом</button>
-    </div>
-    <p class="small" style="margin-top: 14px;">Результат и место в рейтинге сохраняются локально в браузере.</p>
+    <section class="landing-hero">
+      <span class="badge">TRAFF QUIZ</span>
+      <h1>Проходи тесты и выигрывай призы</h1>
+      <p>Тебе доступен первый стартовый тест из 7 вопросов. Сможешь выиграть приз на 5 000 000 монет?</p>
+      <div class="image-placeholder">🖼️ Блок для картинки главной страницы</div>
+      <article class="quiz-card featured">
+        <div>
+          <h3>${qualificationQuiz.title}</h3>
+          <p class="small">${qualificationQuiz.questions.length} вопросов · ${qualificationQuiz.timePerQuestion}с на вопрос${
+            state.qualificationDone ? " · ✅ пройден" : ""
+          }</p>
+        </div>
+        <button class="button button-primary" id="startQualification">${state.qualificationDone ? "Пройти снова" : "Начать тест"}</button>
+      </article>
+      <div class="stack" id="extraCards"></div>
+      <p class="small">После первого теста откроются дополнительные квизы и новые награды.</p>
+    </section>
+
+    <section class="landing-board">
+      <h2>🏆 Лидерборд недели</h2>
+      <div class="leaderboard static-board" id="landingBoard"></div>
+    </section>
   `);
+
   document.querySelector("#startQualification").addEventListener("click", () => startQuiz(qualificationQuiz));
-  document.querySelector("#resumeProgress").addEventListener("click", () => {
-    state = loadState();
-    startApp();
+
+  const cards = document.querySelector("#extraCards");
+  cards.innerHTML = extraQuizzes
+    .map((quiz) =>
+      quizCardHtml(quiz, {
+        locked: !state.qualificationDone,
+        completed: state.completedExtra.includes(quiz.id),
+      }),
+    )
+    .join("");
+
+  if (state.qualificationDone) {
+    cards.querySelectorAll("button[data-quiz]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const selected = extraQuizzes.find((quiz) => quiz.id === button.dataset.quiz);
+        if (selected) startQuiz(selected);
+      });
+    });
+  }
+
+  const board = document.querySelector("#landingBoard");
+  landingLeaders.forEach((entry) => {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `
+      <div class="small">#${entry.place}</div>
+      <div class="user"><span>${entry.name}</span></div>
+      <div><strong>${entry.points}</strong> <span class="small">монет</span></div>
+    `;
+    board.appendChild(row);
   });
 }
 
@@ -223,6 +289,7 @@ function renderQuestion(session) {
   const { quiz, index } = session;
   const question = quiz.questions[index];
   const progress = Math.round((index / quiz.questions.length) * 100);
+  const ringProgress = (session.left / quiz.timePerQuestion) * 100;
 
   setScreen(`
     <div class="progress-wrap">
@@ -232,7 +299,13 @@ function renderQuestion(session) {
       </div>
       <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
     </div>
-    <div class="timer">Осталось времени <strong id="timer">${session.left}с</strong></div>
+    <div class="timer-circle" style="--progress:${ringProgress}%">
+      <div class="timer-circle-inner">
+        <span class="timer-label">Осталось</span>
+        <strong id="timer">${session.left}с</strong>
+      </div>
+    </div>
+    <div class="image-placeholder question-image">${question.visualHint || "🖼️ Блок для картинки вопроса"}</div>
     <h2>${question.text}</h2>
     <div class="stack" id="answers"></div>
   `);
@@ -249,7 +322,12 @@ function renderQuestion(session) {
   timer = setInterval(() => {
     session.left -= 1;
     const timerNode = document.querySelector("#timer");
+    const timerWrap = document.querySelector(".timer-circle");
     if (timerNode) timerNode.textContent = `${session.left}с`;
+    if (timerWrap) {
+      const dynamicProgress = Math.max((session.left / quiz.timePerQuestion) * 100, 0);
+      timerWrap.style.setProperty("--progress", `${dynamicProgress}%`);
+    }
     if (session.left <= 0) {
       choose(session, null);
     }
@@ -296,14 +374,14 @@ function finishExtraQuiz(quizId, score) {
   saveState();
 
   setScreen(`
-    <h2>Квиз завершён</h2>
+    <h2>Квиз завершён 🎉</h2>
     <p>Ты получил <strong>${score}</strong> очков в этом раунде. Продолжай, чтобы подняться выше в недельном топе.</p>
     <div class="stack">
-      <button class="button button-primary" id="toHub">К хабу квизов</button>
+      <button class="button button-primary" id="toMain">Вернуться на главную</button>
       <button class="button button-secondary" id="toBoard">Открыть лидерборд</button>
     </div>
   `);
-  document.querySelector("#toHub").addEventListener("click", renderHub);
+  document.querySelector("#toMain").addEventListener("click", renderLanding);
   document.querySelector("#toBoard").addEventListener("click", renderLeaderboard);
 }
 
@@ -313,25 +391,45 @@ function renderResult() {
   if (state.qualified) {
     setScreen(`
       <span class="badge">Ты прошёл квалификацию</span>
-      <h2>Ты быстро принимаешь решения и хорошо чувствуешь игровые механики.</h2>
+      <h2>🎉 Отличный старт! Ты быстро принимаешь решения и хорошо чувствуешь игровые механики.</h2>
+      <div class="image-placeholder">🖼️ Блок для картинки результатов</div>
       <p>Уровень: <strong>${level}</strong></p>
       <p>Промокод: <strong>${state.bonusCode}</strong></p>
       <div class="stack">
         <button class="button button-primary" id="bonusBtn">Получить бонус</button>
-        <button class="button button-secondary" id="continueBtn">Продолжить</button>
+        <button class="button button-secondary" id="homeBtn">Вернуться на главную</button>
       </div>
+      <div class="spacer"></div>
+      <h3>🏁 Лидерборд участников первого теста</h3>
+      <div class="leaderboard static-board" id="resultBoard"></div>
       ${contactFormHtml()}
     `);
   } else {
     setScreen(`
-      <h2>Ты больше опираешься на рациональность, чем на риск.</h2>
+      <h2>🙂 Хорошая попытка! Ты больше опираешься на рациональность, чем на риск.</h2>
+      <div class="image-placeholder">🖼️ Блок для картинки результатов</div>
       <p>Доступ к остальным квизам уже открыт — попробуй улучшить позицию в рейтинге.</p>
       <div class="stack">
-        <button class="button button-primary" id="continueBtn">Пройти другие квизы</button>
+        <button class="button button-primary" id="homeBtn">Вернуться на главную</button>
       </div>
+      <div class="spacer"></div>
+      <h3>🏁 Лидерборд участников первого теста</h3>
+      <div class="leaderboard static-board" id="resultBoard"></div>
       ${contactFormHtml()}
     `);
   }
+
+  const resultBoard = document.querySelector("#resultBoard");
+  resultLeaders.forEach((entry) => {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `
+      <div class="small">#${entry.place}</div>
+      <div class="user"><span>${entry.name}</span></div>
+      <div><strong>${entry.points}</strong> <span class="small">монет</span></div>
+    `;
+    resultBoard.appendChild(row);
+  });
 
   const bonusBtn = document.querySelector("#bonusBtn");
   if (bonusBtn) {
@@ -341,7 +439,7 @@ function renderResult() {
     });
   }
 
-  document.querySelector("#continueBtn").addEventListener("click", renderHub);
+  document.querySelector("#homeBtn").addEventListener("click", renderLanding);
   attachContactHandler();
 }
 
@@ -412,37 +510,6 @@ async function sendContact(payload) {
   }
 }
 
-function renderHub() {
-  setScreen(`
-    <span class="badge">Квиз-хаб</span>
-    <h2>Доступные квизы</h2>
-    <p>Проходи дополнительные квизы и набирай очки для топ-100 недели.</p>
-    <div class="stack" id="quizList"></div>
-    <div class="spacer"></div>
-    <button class="button button-secondary" id="boardBtn">Открыть лидерборд</button>
-    <button class="button button-outline" id="restartBtn" style="margin-top:8px">Перезапустить MVP</button>
-  `);
-
-  const list = document.querySelector("#quizList");
-  extraQuizzes.forEach((quiz) => {
-    const done = state.completedExtra.includes(quiz.id);
-    const button = document.createElement("button");
-    button.className = "button button-outline option";
-    button.innerHTML = `${quiz.title}<br><span class="small">${quiz.questions.length} вопросов · ${quiz.timePerQuestion}с на вопрос${
-      done ? " · ✅ пройден" : ""
-    }</span>`;
-    button.addEventListener("click", () => startQuiz(quiz));
-    list.appendChild(button);
-  });
-
-  document.querySelector("#boardBtn").addEventListener("click", renderLeaderboard);
-  document.querySelector("#restartBtn").addEventListener("click", () => {
-    localStorage.removeItem(STORAGE_KEY);
-    state = { ...defaultState };
-    renderLanding();
-  });
-}
-
 function renderLeaderboard() {
   const board = [...leaderboardSeed];
   if (state.leaderboardEntry) board.push(state.leaderboardEntry);
@@ -454,7 +521,7 @@ function renderLeaderboard() {
     <p>Статический MVP-лидерборд + твоя позиция с реальными очками.</p>
     <div class="leaderboard" id="rows"></div>
     <div class="spacer"></div>
-    <button class="button button-secondary" id="backBtn">Назад к квизам</button>
+    <button class="button button-secondary" id="backBtn">Вернуться на главную</button>
   `);
 
   const rows = document.querySelector("#rows");
@@ -469,7 +536,7 @@ function renderLeaderboard() {
     rows.appendChild(row);
   });
 
-  document.querySelector("#backBtn").addEventListener("click", renderHub);
+  document.querySelector("#backBtn").addEventListener("click", renderLanding);
 }
 
 function clearTimer() {

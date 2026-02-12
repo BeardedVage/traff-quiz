@@ -1,5 +1,5 @@
 :root {
-  --bg: #f8f9fb;
+  --bg: #f3f6ff;
   --surface: #ffffff;
   --text: #141414;
   --muted: #667085;
@@ -7,7 +7,7 @@
   --accent-soft: #e8efff;
   --danger: #d92020;
   --border: #e6e8ee;
-  --shadow: 0 14px 36px rgba(16, 24, 40, 0.08);
+  --shadow: 0 16px 42px rgba(16, 24, 40, 0.1);
 }
 
 * {
@@ -18,12 +18,12 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: var(--bg);
+  background: linear-gradient(180deg, #f5f7ff 0%, #eef2ff 60%, #f9fbff 100%);
   color: var(--text);
 }
 
 .app-shell {
-  max-width: 580px;
+  max-width: 760px;
   margin: 0 auto;
   padding: 20px 14px 40px;
   min-height: 100vh;
@@ -34,7 +34,7 @@ body {
 .card {
   width: 100%;
   background: var(--surface);
-  border-radius: 20px;
+  border-radius: 24px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
   padding: 20px;
@@ -85,6 +85,11 @@ p {
   transform: scale(0.98);
 }
 
+.button[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .button-primary {
   background: var(--accent);
   color: white;
@@ -103,6 +108,14 @@ p {
 .stack {
   display: grid;
   gap: 10px;
+}
+
+.landing-hero {
+  background: linear-gradient(135deg, #f9fbff 0%, #f0f5ff 100%);
+  border: 1px solid #dbe5ff;
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 14px;
 }
 
 .progress-wrap {
@@ -134,22 +147,102 @@ p {
   transition: width 300ms ease;
 }
 
+.quiz-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: white;
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  position: relative;
+}
+
+.quiz-card.featured {
+  margin-bottom: 10px;
+}
+
+.quiz-card.locked {
+  background: #fafbff;
+}
+
+.quiz-card.locked::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translate(-50%, 4px);
+  background: #141414;
+  color: white;
+  font-size: 12px;
+  border-radius: 8px;
+  padding: 6px 10px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.quiz-card.locked:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.lock {
+  font-size: 14px;
+}
+
 .option {
   text-align: left;
   font-size: 15px;
   font-weight: 500;
 }
 
-.timer {
-  margin-bottom: 14px;
-  color: var(--muted);
-  font-size: 13px;
-  display: flex;
-  justify-content: space-between;
+.timer-circle {
+  --progress: 100%;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 0 auto 14px;
+  background: conic-gradient(var(--danger) var(--progress), #ebedf4 0);
+  display: grid;
+  place-items: center;
 }
 
-.timer strong {
+.timer-circle-inner {
+  width: 126px;
+  height: 126px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.timer-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+#timer {
+  font-size: 34px;
+  line-height: 1;
   color: var(--danger);
+}
+
+.image-placeholder {
+  border: 1px dashed #b8c8f5;
+  border-radius: 14px;
+  background: #f4f7ff;
+  color: #4a5ea8;
+  padding: 20px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.question-image {
+  margin-top: 6px;
 }
 
 .input {
