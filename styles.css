@@ -95,6 +95,11 @@ p {
   color: white;
 }
 
+.button-muted {
+  background: #c7ccd6;
+  color: #424b57;
+}
+
 .button-secondary {
   background: var(--accent-soft);
   color: var(--accent);
@@ -316,6 +321,35 @@ p {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px 5px;
+}
+
+.row-highlighted {
+  background: linear-gradient(90deg, #f1ffe7 0%, #dcffc5 100%);
+  border-color: #93db6f;
+}
+
+.leader-score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.prize-claim {
+  width: auto;
+  padding: 8px 12px;
+  font-size: 13px;
+  border-radius: 10px;
+  background: #d92020;
+  color: #fff;
+}
+
+.prize-block {
+  background: #f5f9ff;
+  border: 1px solid #d6e5ff;
+  border-radius: 12px;
+  padding: 12px;
 }
 
 .avatar {
